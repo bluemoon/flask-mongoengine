@@ -78,7 +78,10 @@ class ModelConverter():
         if field.regex:
             kwargs['validators'].append(validators.Regexp(regex=field.regex))
         self._string_common(model, field, kwargs)
-        return f.TextField(**kwargs)
+        if field.max_length == -1:
+            return f.TextAreaField(**kwargs)
+        else:
+            return f.TextField(**kwargs)
 
     @converts('URLField')
     def conv_URL(self, model, field, kwargs):
